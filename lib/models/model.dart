@@ -20,9 +20,20 @@ class CrimeLocation extends ChangeNotifier {
     this.reportNumber,
     this.longitude,
   });
+  int reportNumbers = 0;
+  void incrementCrime() {
+    reportNumbers++;
+    print(reportNumbers);
+    notifyListeners();
+  }
+}
+
+class Providers extends ChangeNotifier {
+  CrimeLocation crimeLocation = new CrimeLocation();
 
   void incrementCrime() {
-    reportNumber++;
+    crimeLocation.reportNumbers++;
+    print(crimeLocation.reportNumbers);
     notifyListeners();
   }
 }

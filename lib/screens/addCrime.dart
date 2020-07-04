@@ -15,11 +15,13 @@ class AddCrime extends StatelessWidget {
         body: Center(
             child: Column(
           children: <Widget>[
-            Consumer<CrimeLocation>(builder: (context, crimeLocation, child) {
-              return Text(
-                crimeLocation.reportNumber.toString(),
-              );
-            }),
+            Consumer<CrimeLocation>(
+              builder: (context, crimeLocation, child) {
+                return Text(
+                  crimeLocation.reportNumbers.toString(),
+                );
+              },
+            ),
             Consumer<CrimeLocation>(
               builder: (context, crimeLocation, child) {
                 return RaisedButton(
@@ -29,7 +31,7 @@ class AddCrime extends StatelessWidget {
                   child: Text('Press'),
                 );
               },
-            )
+            ),
           ],
         )),
       ),
