@@ -45,7 +45,7 @@ class Auth extends StatelessWidget {
           textColor: Colors.white,
         );
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (BuildContext context) => Maps()));
+            .pushReplacement(MaterialPageRoute(builder: (BuildContext context) => Maps()));
         print('Signed In User: ${user.displayName}');
       } else {
         Fluttertoast.showToast(
