@@ -1,5 +1,6 @@
 import 'package:CrimeMap/screens/auth.dart';
 import 'package:CrimeMap/screens/maps.dart';
+import 'package:CrimeMap/screens/newMap.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,13 +14,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String user;
-  Future<String> getUser() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  String username;
+  SharedPref sharedPrefs;
+  // void getUser() async {
+  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    sharedPreferences.getString('user');
-    return user;
-  }
+  //   String user = sharedPreferences.getString('username');
+  //   setState(() {
+  //     username = user;
+  //   });
+  // }
 
   @override
   void initState() {
@@ -27,15 +31,34 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  void getUser() async {
+    String name = await sharedPrefs.getUser();
+    setState(() {
+      username = name;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Crime Map',
         theme: ThemeData(
-         primaryColor: Colors.green,
+          primaryColor: Colors.green,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: user == null ? Auth() : Maps());
+        home: username == null ? Auth() : Maps());
+  }
+}
+
+class SharedPref {
+  Future<String> getUser() async {
+    final preferences = await SharedPreferences.getInstance();
+    final key = 'username';
+    final valueStored = preferences.getString(key);
+
+    print('Retrieved User: $valueStored');
+
+    return valueStored;
   }
 }

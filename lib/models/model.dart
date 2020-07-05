@@ -9,7 +9,7 @@ class User extends ChangeNotifier {
     this.email,
     this.name,
   });
-  final List<User> uers = [
+  static List<User> getUsers = [
     User(
       name: 'Wanjiru',
       email: "catherinemunene802@gmail.com",
@@ -40,29 +40,53 @@ class CrimeLocation extends ChangeNotifier {
     this.location,
     this.venue,
   });
-  final List<CrimeLocation> crimes = [
+  static List<CrimeLocation> getCrimes = [
     CrimeLocation(
       id: 1,
       latitude: 23.90,
       longitude: 2.56,
       reportNumber: 8,
-      location: 'Kenya',
+      location: 'Abuja',
       venue: 'Kiserian',
     ),
     CrimeLocation(
       id: 2,
-      latitude: 23.90,
-      longitude: 2.56,
+      latitude: 1.2921,
+      longitude: 36.8219,
       reportNumber: 8,
       location: 'Kenya',
       venue: 'Kiserian',
     ),
     CrimeLocation(
       id: 3,
+      latitude: 1.9441,
+      longitude: 30.0619,
+      reportNumber: 8,
+      location: 'Kigali',
+      venue: 'Kiserian',
+    ),
+     CrimeLocation(
+      id: 4,
+      latitude: 23.90,
+      longitude: 0.56,
+      reportNumber: 8,
+      location: 'Abuja',
+      venue: 'Kiserian',
+    ),
+     CrimeLocation(
+      id: 5,
       latitude: 23.90,
       longitude: 2.56,
       reportNumber: 8,
-      location: 'Kenya',
+      location: 'Abuja',
+      venue: 'Kiserian',
+    ),
+     CrimeLocation(
+      id: 6,
+      latitude: 13.90,
+      longitude: 2.56,
+      reportNumber: 8,
+      location: 'Abuja',
       venue: 'Kiserian',
     ),
   ];

@@ -1,4 +1,5 @@
 import 'package:CrimeMap/models/model.dart';
+import 'package:CrimeMap/screens/newMap.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,6 +15,9 @@ class Auth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     Future<FirebaseUser> _signIn() async {
       GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
       GoogleSignInAuthentication googleSignInAuthentication =
@@ -34,21 +38,18 @@ class Auth extends StatelessWidget {
       final FirebaseUser curentUser = await _auth.currentUser();
       assert(user.uid == curentUser.uid);
 
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-
-      sharedPreferences.setString('user', user.displayName);
+      setUsername(user.displayName);
 
       if (curentUser != null) {
         Fluttertoast.showToast(
-          msg: 'SignIn Successful',
+          msg: 'SignIn Successful: ${user.displayName}',
           toastLength: Toast.LENGTH_LONG,
           backgroundColor: Colors.green,
           textColor: Colors.white,
         );
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) =>
-                Maps(crimeLocation: crimeLocation)));
+            builder: (BuildContext context) => MapsRealTrial()));
+        // Maps(crimeLocation: crimeLocation)));
         print('Signed In User: ${user.displayName}');
       } else {
         Fluttertoast.showToast(
@@ -80,23 +81,86 @@ class Auth extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FlatButton(
-              shape: RoundedRectangleBorder(
+            // FlatButton(
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(8.0),
+            //   ),
+            //   //  color: Colors.white,
+            //   child: CircleAvatar(
+            //     backgroundImage: AssetImage('assets/google_logo.png'),
+            //     backgroundColor: Colors.transparent,
+            //   ),
+            //   onPressed: () {
+            //     _signIn();
+            //   },
+            // ),
+            // Text('Tap to Sign In'),
+
+            Container(
+              height: height * .058,
+              width: width * .192,
+              decoration: BoxDecoration(
+                color: Colors.white70,
                 borderRadius: BorderRadius.circular(8.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 1.0,
+                    spreadRadius: 0.0,
+                    offset: Offset(0.5, 0.5), // shadow direction: bottom right
+                  )
+                ],
               ),
-              //  color: Colors.white,
-              child: CircleAvatar(
-                backgroundImage: AssetImage('assets/google_logo.png'),
-                backgroundColor: Colors.transparent,
-              ),
-              onPressed: () {
-                _signIn();
-              },
+              child: IconButton(
+                  icon: Image(
+                    image: AssetImage('assets/google_logo.png'),
+                  ),
+                  onPressed: () {
+                    _signIn();
+                    print("facebook");
+                  }),
             ),
-            Text('Tap to Sign In'),
           ],
         ),
       ),
     );
+  }
+
+//   Widget _facebookIcon(height, width) {
+//     return Container(
+//       height: height * .058,
+//       width: width * .192,
+//       decoration: BoxDecoration(
+//         color: Colors.pink,
+//         borderRadius: BorderRadius.circular(8.0),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.grey,
+//             blurRadius: 1.0,
+//             spreadRadius: 0.0,
+//             offset: Offset(0.5, 0.5), // shadow direction: bottom right
+//           )
+//         ],
+//       ),
+//       child: IconButton(
+//           icon: Image(
+//             image: AssetImage('assets/google_logo.png'),
+//           ),
+//           onPressed: () {
+//             _signIn();
+//             print("facebook");
+//           }),
+//     );
+//   }
+// }
+
+  Future<void> setUsername(String username) async {
+    final preferences = await SharedPreferences.getInstance();
+    final key = 'username';
+    final valueStored = username;
+
+    print('Stored User: $valueStored');
+
+    preferences.setString(key, valueStored);
   }
 }
