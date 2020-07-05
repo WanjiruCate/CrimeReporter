@@ -23,22 +23,113 @@ class _MapsState extends State<Maps> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width,
-            child: GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: LatLng(35.89, 9.0),
-                zoom: 10.5,
-              ),
-              markers: Set.from(allMarkers),
-              // circles: circles,
-              onMapCreated: mapCreated,
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            _map(width),
+            _title("Crime Map", width, height),
+            _addCrimeArea(height, width),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _popupAdd(context, height, width);
+          },
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.green,
+        ),
+      ),
+    );
+  }
+
+  Widget _map(width) {
+    return Container(
+      width: width,
+      child: GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: LatLng(1.43, 36.69),
+          zoom: 10.5,
+        ),
+        markers: Set.from(allMarkers),
+        // circles: circles,
+        onMapCreated: mapCreated,
+      ),
+    );
+  }
+
+  Widget _title(text, width, height) {
+    return Positioned(
+      top: 0,
+      child: Container(
+        color: Colors.green,
+        width: width,
+        // height: height * .1,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: width / 100 * 10,
+              fontWeight: FontWeight.w500,
+              fontStyle: FontStyle.normal,
             ),
           ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  Widget _popupAdd(BuildContext context, height, width) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            child: Container(
+              height: height * .6,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('Try here'),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget _addCrimeArea(height, width) {
+    return Positioned(
+      top: height * .1,
+      left: width * .09,
+      right: width * .09,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        height: height * .04,
+        width: width * .9,
+        child: Text(
+          'Add Here',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: width / 100 * 5,
+            fontWeight: FontWeight.w500,
+            fontStyle: FontStyle.normal,
+          ),
+        ),
       ),
     );
   }
