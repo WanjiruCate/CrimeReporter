@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
           primaryColor: Colors.green,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: username == null ? Auth() : Maps());
+        home: username == null ? Auth() : MapsRealTrial());
   }
 }
 
