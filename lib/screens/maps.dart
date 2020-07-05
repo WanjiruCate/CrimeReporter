@@ -96,7 +96,7 @@ class _MapsState extends State<Maps> {
               borderRadius: BorderRadius.circular(5.0),
             ),
             child: Container(
-              height: height * .6,
+              height: height * .06,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
