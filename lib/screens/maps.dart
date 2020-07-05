@@ -1,20 +1,30 @@
+import 'package:CrimeMap/models/model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 class Maps extends StatefulWidget {
+  final CrimeLocation crimeLocation;
+  Maps({
+    Key key,
+    this.crimeLocation,
+  });
   @override
   _MapsState createState() => _MapsState();
 }
 
 class _MapsState extends State<Maps> {
+  CrimeLocation crimeLocation;
+
   List<Marker> allMarkers = [];
+
   int prevPage;
   PageController _pageController;
   GoogleMapController _controller;
   Position _currentPosition;
   @override
   void initState() {
+    crimeLocation = widget.crimeLocation;
     _getCurrentLocation();
     _pageController = PageController(initialPage: 1, viewportFraction: 0.8)
       ..addListener(_onScroll);
@@ -23,17 +33,29 @@ class _MapsState extends State<Maps> {
 
   @override
   Widget build(BuildContext context) {
+    //Add Markers
+    crimeLocation.crimes.forEach((element) {
+      allMarkers.add(
+        Marker(
+            markerId: MarkerId(element.id.toString()),
+            position: element.locationCoords,
+            infoWindow:
+                InfoWindow(title: element.venue, snippet: element.location)),
+      );
+    });
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            _map(width),
-            _title("Crime Map", width, height),
-            _addCrimeArea(height, width),
-          ],
-        ),
+        body: _currentPosition == null
+            ? CircularProgressIndicator()
+            : Stack(
+                children: <Widget>[
+                  _map(width),
+                  _title("Crime Map", width, height),
+                  _addCrimeArea(height, width),
+                ],
+              ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             _popupAdd(context, height, width);
@@ -53,7 +75,7 @@ class _MapsState extends State<Maps> {
       width: width,
       child: GoogleMap(
         initialCameraPosition: CameraPosition(
-          target: LatLng(1.43, 36.69),
+          target: LatLng(_currentPosition.latitude, _currentPosition.longitude),
           zoom: 10.5,
         ),
         markers: Set.from(allMarkers),
@@ -147,13 +169,14 @@ class _MapsState extends State<Maps> {
     }
   }
 
-  // moveCamera() {
-  //   _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-  //       target: upcomingEvents[_pageController.page.toInt()].locationCoords,
-  //       zoom: 14.0,
-  //       bearing: 45.0,
-  //       tilt: 45.0)));
-  // }
+  moveCamera() {
+    _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target:
+            crimeLocation.crimes[_pageController.page.toInt()].locationCoords,
+        zoom: 14.0,
+        bearing: 45.0,
+        tilt: 45.0)));
+  }
 
   _getCurrentLocation() {
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;

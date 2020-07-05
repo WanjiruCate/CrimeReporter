@@ -1,3 +1,4 @@
+import 'package:CrimeMap/models/model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'maps.dart';
 
 class Auth extends StatelessWidget {
+  CrimeLocation crimeLocation;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = new GoogleSignIn();
 
@@ -44,8 +46,9 @@ class Auth extends StatelessWidget {
           backgroundColor: Colors.green,
           textColor: Colors.white,
         );
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (BuildContext context) => Maps()));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) =>
+                Maps(crimeLocation: crimeLocation)));
         print('Signed In User: ${user.displayName}');
       } else {
         Fluttertoast.showToast(
